@@ -1,4 +1,4 @@
-п»їusing System;
+using System;
 using System.IO;
 
 public enum State
@@ -65,7 +65,7 @@ public class Game
     public Player mouse;
     public GameState state;
 
-    private string finalMessage = null;
+    private string? finalMessage = null;
 
     public Game(int size)
     {
@@ -175,7 +175,7 @@ class Program
         RunTest("2.ChaseData.txt", "2.PursuitLog.txt", 20);
         RunTest("3.ChaseData.txt", "3.PursuitLog.txt", 27);
 
-        Console.WriteLine("Р“РѕС‚РѕРІРѕ! Р¤Р°Р№Р»С‹ PursuitLog.txt СЃРѕР·РґР°РЅС‹.");
+        Console.WriteLine("Готово! Файлы PursuitLog.txt созданы.");
     }
 
     static void RunTest(string input, string output, int size)
