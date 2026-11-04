@@ -15,12 +15,12 @@ namespace TextAnalysis.Model
     {
         public List<Sentence> Sentences { get; private set; } = new List<Sentence>();
 
-        
         public IEnumerable<Sentence> GetSentencesByWordCount()
             => Sentences.OrderBy(s => s.WordCount);
 
         public IEnumerable<Sentence> GetSentencesByLength()
             => Sentences.OrderBy(s => s.Length);
+
         public IEnumerable<string> FindWordsInQuestions(int length)
             => Sentences
                 .Where(s => s.IsQuestion)
@@ -28,6 +28,7 @@ namespace TextAnalysis.Model
                 .Where(w => w.Length == length)
                 .Select(w => w.Value)
                 .Distinct(StringComparer.OrdinalIgnoreCase);
+
         public void RemoveConsonantWords(int length)
         {
             foreach (var s in Sentences)

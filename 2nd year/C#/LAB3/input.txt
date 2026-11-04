@@ -1,0 +1,3 @@
+"Hello," said the cat.
+It's a beautiful day, isn't it?
+Well-known fact: cats rule!

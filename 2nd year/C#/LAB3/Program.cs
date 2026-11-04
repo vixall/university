@@ -6,6 +6,7 @@ using TextAnalysis.Config;
 using TextAnalysis.Model;
 using TextAnalysis.Parsing;
 using TextAnalysis.StopWords;
+using TextAnalysis.Reports;
 
 namespace TextAnalysis
 {
@@ -20,7 +21,7 @@ namespace TextAnalysis
                 Console.WriteLine($"Ошибка: входной файл не найден: {FilePaths.Input}");
                 return;
             }
-            FilePaths.Validate();   
+            FilePaths.Validate();
 
             string source = File.ReadAllText(FilePaths.Input);
             var text = TextParser.Parse(source);
@@ -28,28 +29,28 @@ namespace TextAnalysis
             Console.WriteLine($"Прочитан файл: {FilePaths.Input}");
             Console.WriteLine($"Предложений:   {text.Sentences.Count}");
 
-            
+
             Console.WriteLine("\n===== 1. Предложения по возрастанию количества слов =====");
             foreach (var s in text.GetSentencesByWordCount())
                 Console.WriteLine($"  [{s.WordCount,2}] {s}");
 
-            
+
             Console.WriteLine("\n===== 2. Предложения по возрастанию длины =====");
             foreach (var s in text.GetSentencesByLength())
                 Console.WriteLine($"  [{s.Length,3}] {s}");
 
-            
+
             Console.WriteLine("\n===== 3. Слова длины 3 в вопросительных предложениях =====");
             var found = text.FindWordsInQuestions(3).ToList();
             if (found.Count == 0) Console.WriteLine("  (не найдено)");
             foreach (var w in found) Console.WriteLine($"  {w}");
 
-            
+
             Console.WriteLine("\n===== 4. Удаление слов длины 3, начинающихся с согласной =====");
             text.RemoveConsonantWords(3);
             foreach (var s in text.Sentences) Console.WriteLine($"  {s}");
 
-            
+
             Console.WriteLine("\n===== 5. Замена в предложении #1 слов длины 4 на 'X' =====");
             if (text.Sentences.Count > 1)
             {
@@ -58,16 +59,34 @@ namespace TextAnalysis
                 Console.WriteLine($"  ПОСЛЕ: {text.Sentences[1]}");
             }
 
-            
+
             Console.WriteLine("\n===== 6. Удаление стоп-слов =====");
             var stops = StopWordsLoader.Load();
             text.RemoveStopWords(stops);
             foreach (var s in text.Sentences) Console.WriteLine($"  {s}");
 
-            
+
             Console.WriteLine("\n===== 7. Экспорт в XML =====");
             text.ExportToXml(FilePaths.Output);
             Console.WriteLine($"Результат записан в: {FilePaths.Output}");
+
+
+            //LAB_4
+            Console.WriteLine("\n===== 8. Построение конкорданса =====");
+            string concordancePath = "outputLAB4.txt";
+            var reporter = new ConcordanceReporter();
+
+            try
+            {
+                reporter.GenerateAndSaveReport(source, concordancePath);
+                Console.WriteLine($"Конкорданс успешно сохранен в файл: {concordancePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при создании конкорданса: {ex.Message}");
+            }
+            // end
+
         }
     }
 }
